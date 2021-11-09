@@ -1,3 +1,4 @@
+/* eslint-disable */
 import 'react-native-gesture-handler'
 import React from 'react'
 import { Provider } from 'react-redux'
@@ -5,6 +6,10 @@ import { PersistGate } from 'redux-persist/lib/integration/react'
 import { store, persistor } from '@/Store'
 import ApplicationNavigator from '@/Navigators/Application'
 import './Translations'
+
+import { LogBox } from 'react-native';
+LogBox.ignoreLogs(['new NativeEventEmitter']); // Ignore log notification by message
+LogBox.ignoreAllLogs(); //Ignore all log notifications
 
 const App = () => (
   <Provider store={store}>

@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState, useEffect } from 'react'
 import {
   View,
@@ -13,6 +14,8 @@ import { Brand } from '@/Components'
 import { useTheme } from '@/Hooks'
 import { useLazyFetchOneQuery } from '@/Services/modules/users'
 import { changeTheme } from '@/Store/Theme'
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { color } from 'react-native-reanimated'
 
 const ExampleContainer = () => {
   const { t } = useTranslation()
@@ -35,14 +38,14 @@ const ExampleContainer = () => {
 
   return (
     <ScrollView
-      style={Layout.fill}
-      contentContainerStyle={[
-        Layout.fill,
-        Layout.colCenter,
-        Gutters.smallHPadding,
-      ]}
+      // style={Layout.fill}
+      // contentContainerStyle={[
+      //   Layout.fill,
+      //   Layout.colCenter,
+      //   Gutters.smallHPadding,
+      // ]}
     >
-      <View style={[[Layout.colCenter, Gutters.smallHPadding]]}>
+      {/* <View style={[[Layout.colCenter, Gutters.smallHPadding]]}>
         <Brand />
         {(isLoading || isFetching) && <ActivityIndicator />}
         {!isSuccess ? (
@@ -52,8 +55,8 @@ const ExampleContainer = () => {
             {t('example.helloUser', { name: data?.name })}
           </Text>
         )}
-      </View>
-      <View
+      </View> */}
+      {/* <View
         style={[
           Layout.row,
           Layout.rowHCenter,
@@ -74,9 +77,9 @@ const ExampleContainer = () => {
           selectTextOnFocus
           style={[Layout.fill, Common.textInput]}
         />
-      </View>
-      <Text style={[Fonts.textRegular, Gutters.smallBMargin]}>DarkMode :</Text>
-
+      </View> */}
+      <Text style={[Fonts.textRegular, Gutters.smallBMargin, {marginTop: 1}]}>DarkMode :</Text>
+      <View style={{flexDirection: 'row'}}>
       <TouchableOpacity
         style={[Common.button.rounded, Gutters.regularBMargin]}
         onPress={() => onChangeTheme({ darkMode: null })}
@@ -97,7 +100,9 @@ const ExampleContainer = () => {
       >
         <Text style={Fonts.textRegular}>Light</Text>
       </TouchableOpacity>
-    </ScrollView>
+    
+      </View>
+     </ScrollView>
   )
 }
 
