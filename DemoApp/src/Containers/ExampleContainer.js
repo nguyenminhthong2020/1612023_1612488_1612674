@@ -20,6 +20,8 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import { color } from 'react-native-reanimated'
 import { getImagesAsync } from '@/Store/Images'
 import FastImage from 'react-native-fast-image'
+import debounce from 'lodash.debounce';
+
 
 const ExampleContainer = () => {
   const { t } = useTranslation()
@@ -63,10 +65,10 @@ const ExampleContainer = () => {
     dispatch(changeTheme({ theme, darkMode }))
   }
 
-  const loadMoreItem = () => {
+  const loadMoreItem = debounce(() => {
     console.log('mới nè: ', currentPage + 1)
     setCurrentPage(currentPage + 1)
-  }
+  })
 
   const renderItem = ({ item }) => {
     return (
