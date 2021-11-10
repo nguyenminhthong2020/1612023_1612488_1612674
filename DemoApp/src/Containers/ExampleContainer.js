@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo} from 'react'
 import {
   View,
   ActivityIndicator,
@@ -20,7 +20,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import { color } from 'react-native-reanimated'
 import { getImagesAsync } from '@/Store/Images'
 import FastImage from 'react-native-fast-image'
-import debounce from 'lodash.debounce';
+import debounce from 'lodash.debounce'
 
 
 const ExampleContainer = () => {
@@ -30,47 +30,28 @@ const ExampleContainer = () => {
   const isDarkMode = useSelector(state => state.theme.darkMode)
   const [currentPage, setCurrentPage] = useState(1)
 
-  const listImages = useSelector(state => state.images)
-  const arrUri = listImages.map(i => i.src.original)
-  // console.log(arrUri);
-  console.log('currentPage ' + currentPage)
-
   useEffect(() => {
-    dispatch(
-      getImagesAsync({
-        per_page: 10,
-        page: 1,
-      }),
-    )
-  }, [])
-
-  useEffect(() => {
+    console.log('currentPage ' + currentPage)
     dispatch(
       getImagesAsync({
         per_page: 10 * currentPage,
         page: 1,
       }),
     )
-  }, [currentPage, dispatch])
-
-  const [userId, setUserId] = useState('9')
-  const [fetchOne, { data, isSuccess, isLoading, isFetching, error }] =
-    useLazyFetchOneQuery()
-
-  useEffect(() => {
-    fetchOne(userId)
-  }, [fetchOne, userId])
+  }, [currentPage])
+  const listImages = useSelector(state => state.images)
+  const arrUri = listImages.map(i => i.src.original)
 
   const onChangeTheme = ({ theme, darkMode }) => {
     dispatch(changeTheme({ theme, darkMode }))
   }
 
   const loadMoreItem = debounce(() => {
-    console.log('mới nè: ', currentPage + 1)
     setCurrentPage(currentPage + 1)
   })
 
-  const renderItem = ({ item }) => {
+
+  const renderItem = ({ item, index }) => {
     return (
       <View
         style={{
@@ -81,8 +62,7 @@ const ExampleContainer = () => {
           borderColor: isDarkMode ? 'yellow' : 'black',
         }}
       >
-        <Pressable onPress={() => alert(`Ảnh ${item}`)}>
-          {/* <Text style={{ color: 'red' }}>{`${item}?auto=compress&cs=tinysrgb&h=170`}</Text> */}
+        <Pressable onPress={() => alert(`Ảnh ${index}`)}>
           <FastImage
             style={{ width: '100%', height: 170, borderRadius: 0 }}
             resizeMode={FastImage.resizeMode.cover}
@@ -95,6 +75,7 @@ const ExampleContainer = () => {
       </View>
     )
   }
+  const memoRenderItem = useMemo(() => renderItem)
 
   const renderFooter = () => {
     return (
@@ -103,7 +84,8 @@ const ExampleContainer = () => {
       </View>
     )
   }
-
+  
+  
   const showListImage = () => {
     return (
       <FlatList
@@ -119,10 +101,12 @@ const ExampleContainer = () => {
         initialNumToRender={10}
         data={arrUri}
         keyExtractor={i => i}
-        renderItem={renderItem}
+        renderItem={memoRenderItem}
         ListFooterComponent={renderFooter}
         onEndReached={() => loadMoreItem()}
         onEndReachedThreshold={0.5}
+
+        disableVirtualization={false}
       />
     )
   }
