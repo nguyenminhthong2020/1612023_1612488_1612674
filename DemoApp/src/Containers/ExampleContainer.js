@@ -29,13 +29,15 @@ const ExampleContainer = (props) => {
   const dispatch = useDispatch()
   const isDarkMode = useSelector(state => state.theme.darkMode)
   const [currentPage, setCurrentPage] = useState(1)
+  const [data, setData] = useState([])
+
 
   useEffect(() => {
     console.log('currentPage ' + currentPage)
     dispatch(
       getImagesAsync({
-        per_page: 10 * currentPage,
-        page: 1,
+        per_page: 10,
+        page: currentPage,
       }),
     )
   }, [currentPage])
@@ -45,13 +47,20 @@ const ExampleContainer = (props) => {
     dispatch(changeTheme({ theme, darkMode }))
   }
 
+  useEffect(() => {
+    const newData = data
+    newData.push(...listImages)
+    setData(newData)
+  }, [listImages])
+
   const loadMoreItem = debounce(() => {
-    setCurrentPage(currentPage + 1)
+    if (data.length >= currentPage * 10) {
+      setCurrentPage(currentPage + 1)
+    }
   })
 
 
-  const renderItem = ({ item, index }) => {
-    return (
+  const renderItem = ({ item, index }) => (
       <View
         style={{
           height: 170,
@@ -79,7 +88,7 @@ const ExampleContainer = (props) => {
         </Pressable>
       </View>
     )
-  }
+    
   const memoRenderItem = useMemo(() => renderItem)
 
   const renderFooter = () => {
@@ -104,8 +113,9 @@ const ExampleContainer = (props) => {
         style={{ marginBottom: 120, marginTop: 10 }}
         showsVerticalScrollIndicator={true}
         initialNumToRender={10}
-        data={listImages}
-        keyExtractor={i => i.id}
+        data={data}
+        extraData={data}
+        keyExtractor={(item, index) => index.toString()}
         renderItem={memoRenderItem}
         ListFooterComponent={renderFooter}
         onEndReached={() => loadMoreItem()}
