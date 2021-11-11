@@ -23,7 +23,7 @@ import FastImage from 'react-native-fast-image'
 import debounce from 'lodash.debounce'
 
 
-const ExampleContainer = () => {
+const ExampleContainer = (props) => {
   const { t } = useTranslation()
   const { Common, Fonts, Gutters, Layout } = useTheme()
   const dispatch = useDispatch()
@@ -40,7 +40,6 @@ const ExampleContainer = () => {
     )
   }, [currentPage])
   const listImages = useSelector(state => state.images)
-  const arrUri = listImages.map(i => i.src.original)
 
   const onChangeTheme = ({ theme, darkMode }) => {
     dispatch(changeTheme({ theme, darkMode }))
@@ -62,12 +61,18 @@ const ExampleContainer = () => {
           borderColor: isDarkMode ? 'yellow' : 'black',
         }}
       >
-        <Pressable onPress={() => alert(`Ảnh ${index}`)}>
+        <Pressable onPress={() => props.navigation.navigate("ImageDetail", 
+            {
+              uri: `${item.src.original}`,
+              id: item.id,
+              photographer: item.photographer,
+              photographer_url: item.photographer_url,
+            })/*alert(`Ảnh ${index}`)*/}>
           <FastImage
             style={{ width: '100%', height: 170, borderRadius: 0 }}
             resizeMode={FastImage.resizeMode.cover}
             source={{
-              uri: `${item}?auto=compress&cs=tinysrgb&h=170`,
+              uri: `${item.src.original}?auto=compress&cs=tinysrgb&h=170`,
               priority: FastImage.priority.normal,
             }}
           />
@@ -99,8 +104,8 @@ const ExampleContainer = () => {
         style={{ marginBottom: 120, marginTop: 10 }}
         showsVerticalScrollIndicator={true}
         initialNumToRender={10}
-        data={arrUri}
-        keyExtractor={i => i}
+        data={listImages}
+        keyExtractor={i => i.id}
         renderItem={memoRenderItem}
         ListFooterComponent={renderFooter}
         onEndReached={() => loadMoreItem()}

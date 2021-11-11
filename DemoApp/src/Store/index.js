@@ -34,8 +34,8 @@ const reducers = combineReducers({
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  whitelist: ['theme'],
-  blacklist: ['images'] //test
+  whitelist: ['theme', 'images'],
+  //blacklist: ['images'] //test
 }
 
 const persistedReducer = persistReducer(persistConfig, reducers)
