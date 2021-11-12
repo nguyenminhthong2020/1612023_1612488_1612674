@@ -51,9 +51,9 @@ const ExampleContainer = (props) => {
   }, [listImages])
 
   const loadMoreItem = debounce(() => {
-    // if (data.length >= currentPage * 10) {
+     if (data.length >= currentPage * 10) {
       setCurrentPage(currentPage + 1)
-    //}
+    }
   })
   
   const onChangeTheme = ({ theme, darkMode }) => {
