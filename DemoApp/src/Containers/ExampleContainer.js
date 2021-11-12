@@ -4,20 +4,20 @@ import {
   View,
   ActivityIndicator,
   Text,
-  TextInput,
+  //TextInput,
   Pressable,
   TouchableOpacity,
-  ScrollView,
+  //ScrollView,
   FlatList,
 } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import { Brand } from '@/Components'
+//import { Brand } from '@/Components'
 import { useTheme } from '@/Hooks'
-import { useLazyFetchOneQuery } from '@/Services/modules/users'
+//import { useLazyFetchOneQuery } from '@/Services/modules/users'
 import { changeTheme } from '@/Store/Theme'
-import FontAwesome from 'react-native-vector-icons/FontAwesome'
-import { color } from 'react-native-reanimated'
+//import FontAwesome from 'react-native-vector-icons/FontAwesome'
+//import { color } from 'react-native-reanimated'
 import { getImagesAsync } from '@/Store/Images'
 import FastImage from 'react-native-fast-image'
 import debounce from 'lodash.debounce'
@@ -43,22 +43,22 @@ const ExampleContainer = (props) => {
   }, [currentPage])
   const listImages = useSelector(state => state.images)
 
-  const onChangeTheme = ({ theme, darkMode }) => {
-    dispatch(changeTheme({ theme, darkMode }))
-  }
-
   useEffect(() => {
-    const newData = data
-    newData.push(...listImages)
-    setData(newData)
+    // const newData = data
+    // newData.push(...listImages)
+    // setData(newData)
+    setData([...data, ...listImages])
   }, [listImages])
 
   const loadMoreItem = debounce(() => {
-    if (data.length >= currentPage * 10) {
+    // if (data.length >= currentPage * 10) {
       setCurrentPage(currentPage + 1)
-    }
+    //}
   })
-
+  
+  const onChangeTheme = ({ theme, darkMode }) => {
+    dispatch(changeTheme({ theme, darkMode }))
+  }
 
   const renderItem = ({ item, index }) => (
       <View
